@@ -111,3 +111,4 @@ D:\VisualStudio\Fullstack\MedicalRecordService\obj\Debug\net8.0\refint\MedicalRe
 D:\VisualStudio\Fullstack\MedicalRecordService\obj\Debug\net8.0\MedicalRecordService.pdb
 D:\VisualStudio\Fullstack\MedicalRecordService\obj\Debug\net8.0\MedicalRecordService.genruntimeconfig.cache
 D:\VisualStudio\Fullstack\MedicalRecordService\obj\Debug\net8.0\ref\MedicalRecordService.dll
+D:\VisualStudio\Fullstack\MedicalRecordService\obj\Debug\net8.0\MedicalRecordService.sourcelink.json
