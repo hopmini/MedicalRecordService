@@ -20,16 +20,19 @@ public class MedicalDbContext : DbContext
         modelBuilder.Entity<MedicalRecord>()
             .HasOne(m => m.Patient)
             .WithMany(p => p.MedicalRecords)
-            .HasForeignKey(m => m.PatientId);
+            .HasForeignKey(m => m.PatientId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.MedicalRecord)
             .WithOne(m => m.Prescription)
-            .HasForeignKey<Prescription>(p => p.MedicalRecordId);
+            .HasForeignKey<Prescription>(p => p.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<PrescriptionDetail>()
             .HasOne(d => d.Prescription)
             .WithMany(p => p.Details)
-            .HasForeignKey(d => d.PrescriptionId);
+            .HasForeignKey(d => d.PrescriptionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

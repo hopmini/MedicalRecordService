@@ -106,4 +106,23 @@ public class PatientsController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok(new { Message = "Cập nhật hồ sơ sức khỏe thành công!" });
     }
+
+    // API: Xóa hồ sơ bệnh nhân (kèm toàn bộ bệnh án + đơn thuốc)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletePatient(Guid id)
+    {
+        var patient = await _context.Patients
+            .Include(p => p.MedicalRecords)
+            .ThenInclude(m => m.Prescription)
+            .ThenInclude(p => p!.Details)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (patient == null)
+            return NotFound("Không tìm thấy bệnh nhân cần xóa.");
+
+        _context.Patients.Remove(patient);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "Đã xóa hồ sơ bệnh nhân và toàn bộ bệnh án liên quan!" });
+    }
 }

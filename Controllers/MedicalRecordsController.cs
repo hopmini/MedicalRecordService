@@ -90,6 +90,43 @@ public class MedicalRecordsController : ControllerBase
         return Ok(records);
     }
 
+    // API: Lấy toàn bộ bệnh án của 1 bác sĩ
+    [HttpGet("doctor/{doctorId}")]
+    public async Task<IActionResult> GetRecordsByDoctor(Guid doctorId)
+    {
+        var records = await _context.MedicalRecords
+            .Include(m => m.Prescription)
+            .ThenInclude(p => p!.Details)
+            .Where(m => m.DoctorId == doctorId)
+            .OrderByDescending(m => m.CreatedAt)
+            .Select(m => new MedicalRecordResponseDto
+            {
+                Id = m.Id,
+                PatientId = m.PatientId,
+                DoctorId = m.DoctorId,
+                Symptoms = m.Symptoms,
+                Diagnosis = m.Diagnosis,
+                Notes = m.Notes,
+                CreatedAt = m.CreatedAt,
+                Prescription = m.Prescription != null ? new PrescriptionResponseDto
+                {
+                    Id = m.Prescription.Id,
+                    Instructions = m.Prescription.Instructions,
+                    PrescribedAt = m.Prescription.PrescribedAt,
+                    Details = m.Prescription.Details.Select(d => new PrescriptionDetailResponseDto
+                    {
+                        Id = d.Id,
+                        MedicationId = d.MedicationId,
+                        MedicationName = d.MedicationName,
+                        Quantity = d.Quantity,
+                        Dosage = d.Dosage
+                    }).ToList()
+                } : null
+            }).ToListAsync();
+
+        return Ok(records);
+    }
+
     // API: Bác sĩ ghi bệnh án mới
     [HttpPost]
     public async Task<IActionResult> CreateRecord([FromBody] CreateMedicalRecordDto dto)
@@ -128,5 +165,23 @@ public class MedicalRecordsController : ControllerBase
             Message = "Ghi bệnh án thành công!", 
             RecordId = newRecord.Id 
         });
+    }
+
+    // API: Xóa 1 bệnh án (kèm đơn thuốc nếu có)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteRecord(Guid id)
+    {
+        var record = await _context.MedicalRecords
+            .Include(m => m.Prescription)
+            .ThenInclude(p => p!.Details)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (record == null)
+            return NotFound("Không tìm thấy bệnh án cần xóa.");
+
+        _context.MedicalRecords.Remove(record);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "Đã xóa bệnh án thành công!" });
     }
 }
