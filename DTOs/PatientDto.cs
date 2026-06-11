@@ -8,12 +8,14 @@ public class CreatePatientDto
     public string Gender { get; set; } = null!;
     public string? MedicalHistory { get; set; }
     public string? Allergies { get; set; }
+    public int? GatewayPatientId { get; set; }
 }
 
 // Dùng để trả data về cho client xem
 public class PatientResponseDto
 {
     public Guid Id { get; set; }
+    public int? GatewayPatientId { get; set; }
     public string FullName { get; set; } = null!;
     public DateTime DateOfBirth { get; set; }
     public string Gender { get; set; } = null!;

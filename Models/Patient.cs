@@ -8,6 +8,7 @@ public class Patient
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid Id { get; set; } = Guid.NewGuid();
+    public int? GatewayPatientId { get; set; } // int ID từ Gateway (IdentityDB)
     public string FullName { get; set; } = null!;
     public DateTime DateOfBirth { get; set; }
     public string Gender { get; set; } = null!;

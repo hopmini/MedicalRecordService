@@ -3,14 +3,18 @@ namespace MedicalRecordService.DTOs;
 public class CreateMedicalRecordDto
 {
     public Guid PatientId { get; set; }
-    
-    // Đáng lẽ cái này mốc từ JWT token của bác sĩ lúc login, 
-    // nhưng giờ mình chưa nối Auth nên cứ truyền tay từ Postman/Swagger vào đã
     public Guid DoctorId { get; set; } 
     
     public string Symptoms { get; set; } = null!;
     public string Diagnosis { get; set; } = null!;
     public string? Notes { get; set; }
+
+    // [Cross-Service] Tự động cập nhật Appointment → "Đã khám xong" khi ghi bệnh án
+    public Guid? AppointmentId { get; set; }
+    // Tên bệnh nhân để Self-Heal tạo hồ sơ chính xác (thay vì "Bệnh nhân Medicare")
+    public string? PatientName { get; set; }
+    // Gateway Patient ID (int) để đồng bộ với các service khác
+    public int? GatewayPatientId { get; set; }
 }
 
 public class MedicalRecordResponseDto
