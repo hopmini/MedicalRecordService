@@ -26,6 +26,7 @@ public class PatientsController : ControllerBase
             .Select(p => new PatientResponseDto
             {
                 Id = p.Id,
+                GatewayPatientId = p.GatewayPatientId,
                 FullName = p.FullName,
                 DateOfBirth = p.DateOfBirth,
                 Gender = p.Gender,
