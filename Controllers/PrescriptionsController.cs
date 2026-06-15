@@ -33,6 +33,7 @@ public class PrescriptionsController : ControllerBase
         // 1. Check xem bệnh án có thật không
         var record = await _context.MedicalRecords
             .Include(m => m.Prescription)
+            .Include(m => m.Patient)
             .FirstOrDefaultAsync(m => m.Id == dto.MedicalRecordId);
 
         if (record == null) 
@@ -99,6 +100,7 @@ public class PrescriptionsController : ControllerBase
             {
                 PrescriptionId = newPrescription.Id,
                 PatientId = patientIntId,
+                PatientName = record.Patient?.FullName ?? "Bệnh nhân",
                 DoctorName = User.FindFirst("FullName")?.Value ?? User.FindFirst("fullName")?.Value ?? "Bác sĩ",
                 Medicines = dto.Details.Select(d => {
                     int medicineIntId = 1;

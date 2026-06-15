@@ -61,6 +61,7 @@ public class PatientsController : ControllerBase
         return Ok(new PatientResponseDto
         {
             Id = patient.Id,
+            GatewayPatientId = patient.GatewayPatientId,
             FullName = patient.FullName,
             DateOfBirth = patient.DateOfBirth,
             Gender = patient.Gender,
