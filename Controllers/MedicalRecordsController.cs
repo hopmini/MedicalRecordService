@@ -187,7 +187,7 @@ public class MedicalRecordsController : ControllerBase
         _context.MedicalRecords.Add(newRecord);
         await _context.SaveChangesAsync();
 
-        // [CROSS-SERVICE SYNC] Cập nhật trạng thái Appointment thành "Đã khám" (Status = 3)
+        // [CROSS-SERVICE SYNC] Cập nhật trạng thái Appointment thành "Đã khám" (Status = 2)
         if (dto.AppointmentId.HasValue)
         {
             _ = Task.Run(async () =>

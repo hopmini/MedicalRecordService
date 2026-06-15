@@ -120,6 +120,15 @@ public class PatientsController : ControllerBase
         if (patient == null)
             return NotFound("Không tìm thấy bệnh nhân cần xóa.");
 
+        foreach (var record in patient.MedicalRecords)
+        {
+            if (record.Prescription != null)
+            {
+                _context.PrescriptionDetails.RemoveRange(record.Prescription.Details);
+                _context.Prescriptions.Remove(record.Prescription);
+            }
+        }
+        _context.MedicalRecords.RemoveRange(patient.MedicalRecords);
         _context.Patients.Remove(patient);
         await _context.SaveChangesAsync();
 

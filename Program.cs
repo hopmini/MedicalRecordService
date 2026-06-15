@@ -92,6 +92,18 @@ using (var scope = app.Services.CreateScope())
                 Console.WriteLine("✅ MedicalDB Database ensured & created successfully.");
             }
             success = true;
+
+            // Self-healing: Ensure "GatewayPatientId" column exists in "Patients" table
+            try
+            {
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"Patients\" ADD COLUMN IF NOT EXISTS \"GatewayPatientId\" integer NULL;");
+                Console.WriteLine("✅ Self-healing: Ensured \"GatewayPatientId\" column exists in \"Patients\" table.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ Self-healing warning: Could not verify/add GatewayPatientId column: {ex.Message}");
+            }
+
             break;
         }
         catch (Exception ex)
