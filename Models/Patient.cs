@@ -14,6 +14,7 @@ public class Patient
     public string Gender { get; set; } = null!;
     public string? MedicalHistory { get; set; } // Tiền sử bệnh
     public string? Allergies { get; set; } // Dị ứng
+    public string? BloodGroup { get; set; } // Nhóm máu
     
     public ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
 }

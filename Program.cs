@@ -97,11 +97,22 @@ using (var scope = app.Services.CreateScope())
             try
             {
                 db.Database.ExecuteSqlRaw("ALTER TABLE \"Patients\" ADD COLUMN IF NOT EXISTS \"GatewayPatientId\" integer NULL;");
-                Console.WriteLine("✅ Self-healing: Ensured \"GatewayPatientId\" column exists in \"Patients\" table.");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"Patients\" ADD COLUMN IF NOT EXISTS \"BloodGroup\" text NULL;");
+                Console.WriteLine("✅ Self-healing: Ensured \"GatewayPatientId\" and \"BloodGroup\" columns exist in \"Patients\" table.");
+                
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"Title\" text NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"Weight\" double precision NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"Height\" double precision NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"BloodPressure\" text NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"HeartRate\" integer NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"Temperature\" double precision NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"CustomMetricsJson\" text NULL;");
+                db.Database.ExecuteSqlRaw("ALTER TABLE \"MedicalRecords\" ADD COLUMN IF NOT EXISTS \"AttachmentsJson\" text NULL;");
+                Console.WriteLine("✅ Self-healing: Ensured new MedicalRecords columns exist.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"⚠️ Self-healing warning: Could not verify/add GatewayPatientId column: {ex.Message}");
+                Console.WriteLine($"⚠️ Self-healing warning: Could not verify/add columns: {ex.Message}");
             }
 
             break;

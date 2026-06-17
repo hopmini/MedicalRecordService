@@ -4,10 +4,17 @@ public class CreateMedicalRecordDto
 {
     public Guid PatientId { get; set; }
     public Guid DoctorId { get; set; } 
-    
+    public string? Title { get; set; }
     public string Symptoms { get; set; } = null!;
     public string Diagnosis { get; set; } = null!;
     public string? Notes { get; set; }
+    public double? Weight { get; set; }
+    public double? Height { get; set; }
+    public string? BloodPressure { get; set; }
+    public int? HeartRate { get; set; }
+    public double? Temperature { get; set; }
+    public string? CustomMetricsJson { get; set; }
+    public string? AttachmentsJson { get; set; }
 
     // [Cross-Service] Tự động cập nhật Appointment → "Đã khám xong" khi ghi bệnh án
     public Guid? AppointmentId { get; set; }
@@ -22,9 +29,17 @@ public class MedicalRecordResponseDto
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }
     public Guid DoctorId { get; set; }
+    public string? Title { get; set; }
     public string Symptoms { get; set; } = null!;
     public string Diagnosis { get; set; } = null!;
     public string? Notes { get; set; }
+    public double? Weight { get; set; }
+    public double? Height { get; set; }
+    public string? BloodPressure { get; set; }
+    public int? HeartRate { get; set; }
+    public double? Temperature { get; set; }
+    public string? CustomMetricsJson { get; set; }
+    public string? AttachmentsJson { get; set; }
     public DateTime CreatedAt { get; set; }
     public PrescriptionResponseDto? Prescription { get; set; }
 }

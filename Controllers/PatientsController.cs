@@ -31,7 +31,8 @@ public class PatientsController : ControllerBase
                 DateOfBirth = p.DateOfBirth,
                 Gender = p.Gender,
                 MedicalHistory = p.MedicalHistory,
-                Allergies = p.Allergies
+                Allergies = p.Allergies,
+                BloodGroup = p.BloodGroup
             }).ToListAsync();
 
         return Ok(patients);
@@ -51,11 +52,21 @@ public class PatientsController : ControllerBase
                 DateOfBirth = DateTime.Today.AddYears(-30),
                 Gender = "Nam",
                 MedicalHistory = "Khám lần đầu",
-                Allergies = "Không có"
+                Allergies = "Không có",
+                BloodGroup = "O"
             };
+
+            // Parse GatewayPatientId from GUID last segment if possible
+            var guidString = id.ToString();
+            var lastSegment = guidString.Split('-').Last().TrimStart('0');
+            if (!string.IsNullOrEmpty(lastSegment) && int.TryParse(lastSegment, out int parsedInt))
+            {
+                patient.GatewayPatientId = parsedInt;
+            }
+
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
-            Console.WriteLine($"🛡️ [PatientsController Self-Heal] Tự động khởi tạo hồ sơ Bệnh nhân (Id: {id})");
+            Console.WriteLine($"🛡️ [PatientsController Self-Heal] Tự động khởi tạo hồ sơ Bệnh nhân (Id: {id}, GatewayId: {patient.GatewayPatientId})");
         }
 
         return Ok(new PatientResponseDto
@@ -66,7 +77,8 @@ public class PatientsController : ControllerBase
             DateOfBirth = patient.DateOfBirth,
             Gender = patient.Gender,
             MedicalHistory = patient.MedicalHistory,
-            Allergies = patient.Allergies
+            Allergies = patient.Allergies,
+            BloodGroup = patient.BloodGroup
         });
     }
 
@@ -80,7 +92,9 @@ public class PatientsController : ControllerBase
             DateOfBirth = dto.DateOfBirth,
             Gender = dto.Gender,
             MedicalHistory = dto.MedicalHistory,
-            Allergies = dto.Allergies
+            Allergies = dto.Allergies,
+            BloodGroup = dto.BloodGroup,
+            GatewayPatientId = dto.GatewayPatientId
         };
 
         _context.Patients.Add(newPatient);
@@ -104,6 +118,11 @@ public class PatientsController : ControllerBase
         patient.Gender = dto.Gender;
         patient.MedicalHistory = dto.MedicalHistory;
         patient.Allergies = dto.Allergies;
+        patient.BloodGroup = dto.BloodGroup;
+        if (dto.GatewayPatientId != null)
+        {
+            patient.GatewayPatientId = dto.GatewayPatientId;
+        }
 
         await _context.SaveChangesAsync();
         return Ok(new { Message = "Cập nhật hồ sơ sức khỏe thành công!" });
