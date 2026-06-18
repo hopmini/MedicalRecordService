@@ -1,6 +1,5 @@
 namespace MedicalRecordService.DTOs;
 
-// Dùng để hứng data khi Lễ tân/Bệnh nhân tạo mới hồ sơ
 public class CreatePatientDto
 {
     public string FullName { get; set; } = null!;
@@ -10,9 +9,38 @@ public class CreatePatientDto
     public string? Allergies { get; set; }
     public string? BloodGroup { get; set; }
     public int? GatewayPatientId { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
+    public string? Address { get; set; }
+    public string? IdentityCard { get; set; }
+    public string? InsuranceNumber { get; set; }
+    public string? Occupation { get; set; }
+    public string? Ethnicity { get; set; }
+    public string? Nationality { get; set; }
+    public string? EmergencyContact { get; set; }
+    public string? EmergencyPhone { get; set; }
 }
 
-// Dùng để trả data về cho client xem
+public class UpdatePatientDto
+{
+    public string? FullName { get; set; }
+    public DateTime? DateOfBirth { get; set; }
+    public string? Gender { get; set; }
+    public string? MedicalHistory { get; set; }
+    public string? Allergies { get; set; }
+    public string? BloodGroup { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
+    public string? Address { get; set; }
+    public string? IdentityCard { get; set; }
+    public string? InsuranceNumber { get; set; }
+    public string? Occupation { get; set; }
+    public string? Ethnicity { get; set; }
+    public string? Nationality { get; set; }
+    public string? EmergencyContact { get; set; }
+    public string? EmergencyPhone { get; set; }
+}
+
 public class PatientResponseDto
 {
     public Guid Id { get; set; }
@@ -23,4 +51,14 @@ public class PatientResponseDto
     public string? MedicalHistory { get; set; }
     public string? Allergies { get; set; }
     public string? BloodGroup { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
+    public string? Address { get; set; }
+    public string? IdentityCard { get; set; }
+    public string? InsuranceNumber { get; set; }
+    public string? Occupation { get; set; }
+    public string? Ethnicity { get; set; }
+    public string? Nationality { get; set; }
+    public string? EmergencyContact { get; set; }
+    public string? EmergencyPhone { get; set; }
 }

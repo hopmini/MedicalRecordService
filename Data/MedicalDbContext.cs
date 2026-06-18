@@ -11,17 +11,24 @@ public class MedicalDbContext : DbContext
     public DbSet<MedicalRecord> MedicalRecords { get; set; }
     public DbSet<Prescription> Prescriptions { get; set; }
     public DbSet<PrescriptionDetail> PrescriptionDetails { get; set; }
+    public DbSet<Icd10Code> Icd10Codes { get; set; }
+    public DbSet<LabTest> LabTests { get; set; }
+    public DbSet<TreatmentPlan> TreatmentPlans { get; set; }
+    public DbSet<TreatmentProgression> TreatmentProgressions { get; set; }
+    public DbSet<AuditLogEntry> AuditLogEntries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Config quan hệ giữa các bảng cho đỡ bị ngáo lúc join
         modelBuilder.Entity<MedicalRecord>()
             .HasOne(m => m.Patient)
             .WithMany(p => p.MedicalRecords)
             .HasForeignKey(m => m.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<MedicalRecord>()
+            .HasQueryFilter(m => !m.IsDeleted);
 
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.MedicalRecord)
@@ -34,5 +41,26 @@ public class MedicalDbContext : DbContext
             .WithMany(p => p.Details)
             .HasForeignKey(d => d.PrescriptionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<LabTest>()
+            .HasOne(l => l.MedicalRecord)
+            .WithMany(m => m.LabTests)
+            .HasForeignKey(l => l.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TreatmentPlan>()
+            .HasOne(t => t.MedicalRecord)
+            .WithMany(m => m.TreatmentPlans)
+            .HasForeignKey(t => t.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TreatmentProgression>()
+            .HasOne(p => p.TreatmentPlan)
+            .WithMany(t => t.Progressions)
+            .HasForeignKey(p => p.TreatmentPlanId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AuditLogEntry>()
+            .HasIndex(a => a.RecordId);
     }
 }
